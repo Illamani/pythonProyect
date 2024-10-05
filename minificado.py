@@ -4,12 +4,8 @@ import os, platform, random
 
 """
 Notas:
-Hasta el modulo 0 anda todo bien
-Modulo 0 no esta jajaj
 
 No anda el cambio de años
-El tema del sexo podriamos ponerlo en mayusucula y minuscula
-Cambiarle el nombre
 
 """
 
@@ -20,7 +16,7 @@ PROPS_ESTUDIANTE = ["Nombre","Nacimiento","Biografía","Hobbies","Género","Ciud
 def inicializar_likes_mock(likes):
 	for i in range(8):
 		for j in range(8):
-			likes[i][j] = random.randint(0, 1)
+			likes[i][j] = random.choice([True, False])
 
 
 def inicializar_estudiantes_mock(estudiantes, estados):
@@ -126,10 +122,10 @@ def ingresar_fecha():
     while fecha[0] == "":
         fecha[0] = input("Ingresa el día de nacimiento: ")
 
-    while fecha[0] == "":
+    while fecha[1] == "":
         fecha[1] = input("Ingresa el mes de nacimiento: ")
 
-    while fecha[0] == "":
+    while fecha[2] == "":
         fecha[2] = input("Ingresa el año de nacimento: ")
 
     return fecha
@@ -425,10 +421,10 @@ def contar_estudiantes(estudiantes):
 
 def ingresar_propiedad(prop):
     if prop == PROPS_ESTUDIANTE[4]:
-        valor = input(f"Ingrese {GENERO[1]} o {GENERO[0]}: ")
+        valor = input(f"Ingrese {GENERO[1]} o {GENERO[0]}: ").upper()
 
         while valor != GENERO[0] and valor != GENERO[1]:
-            valor = input(f"Debe ingresar {prop}:\n\t")
+            valor = input(f"Debe ingresar {prop}:\n\t").upper()
     elif prop == PROPS_ESTUDIANTE[1]:
         print("\nFecha de nacimiento")
         valor = solicitar_fecha_nacimiento()
@@ -1170,6 +1166,8 @@ def gestionador_menu_principal_estudiante(est_id, estudiantes, estados, me_gusta
     opc = ""
 
     while opc != "0" and estados[est_id]:
+        for i in range(8):
+            print(me_gusta[i])
         opc = mostrar_menu_principal_estudiante()
 
         match opc:
@@ -1228,7 +1226,7 @@ def main():
     motivo_reportes = [""] * 40
     estados = [False] * 8    
 
-    inicializar_likes_mock(likes)
+    inicializar_likes_mock(me_gusta)
     inicializar_estudiantes_mock(estudiantes, estados)
     inicializar_moderadores_mock(moderadores)
     inicializar_reportes_mock(reportes, motivo_reportes)
