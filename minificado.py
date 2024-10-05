@@ -17,6 +17,12 @@ GENERO = ["F", "M"]
 PROPS_ESTUDIANTE = ["Nombre","Nacimiento","Biografía","Hobbies","Género","Ciudad","País",]
 
 
+def inicializar_likes_mock(likes):
+	for i in range(8):
+		for j in range(8):
+			likes[i][j] = random.randint(0, 1)
+
+
 def inicializar_estudiantes_mock(estudiantes, estados):
     estudiantes[0][0] = "estudiante1@ayed.com"
     estudiantes[0][1] = "111222"
@@ -1214,13 +1220,15 @@ def manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, e
 
 
 def main():
+    likes = [[0] * 8 for n in range(8)]
     estudiantes = [[""] * 9 for n in range(8)]
     moderadores = [[""] * 2 for n in range(4)]
     me_gusta = [[False] * 8 for n in range(8)]
     reportes = [[-1] * 3 for n in range(40)]
     motivo_reportes = [""] * 40
-    estados = [False] * 8
+    estados = [False] * 8    
 
+    inicializar_likes_mock(likes)
     inicializar_estudiantes_mock(estudiantes, estados)
     inicializar_moderadores_mock(moderadores)
     inicializar_reportes_mock(reportes, motivo_reportes)
