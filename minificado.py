@@ -1,8 +1,6 @@
 from datetime import date, datetime
 from getpass import getpass
-import os
-import platform
-import random
+import os, platform, random
 
 """
 Notas:
@@ -15,32 +13,8 @@ Cambiarle el nombre
 
 """
 
-"""
-GENERO: Arreglo de 0 a 1 de string
-PROPS_ESTUDIANTE: Arreglo de 0 a 6 de string
-"""
 GENERO = ["F", "M"]
-PROPS_ESTUDIANTE = [
-    "Nombre",
-    "Nacimiento",
-    "Biografía",
-    "Hobbies",
-    "Género",
-    "Ciudad",
-    "País",
-]
-
-### Útiles ###
-
-"""
-comando, so: string
-"""
-### Mocks ###
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-"""
+PROPS_ESTUDIANTE = ["Nombre","Nacimiento","Biografía","Hobbies","Género","Ciudad","País",]
 
 
 def inicializar_estudiantes_mock(estudiantes, estados):
@@ -87,21 +61,12 @@ def inicializar_estudiantes_mock(estudiantes, estados):
     estudiantes[3][7] = GENERO[0]
     estudiantes[3][8] = "Asunción"
     estados[3] = True
-
-
-"""
-mod: Arreglo multi de 2x4 de string
-"""
+    
 
 def inicializar_moderadores_mock(mod):
     mod[0][0] = "moderador1@ayed.com"
     mod[0][1] = "111222"
-
-"""
-reportes: Arreglo de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-"""
-
+    
 
 def inicializar_reportes_mock(reportes, motivo_reportes):
     reportes[0][0] = 0
@@ -122,14 +87,8 @@ def inicializar_reportes_mock(reportes, motivo_reportes):
 
 ### Registro y Conexión ###
 
-"""
-password: string
-"""
-
 
 def limpiar_consola():
-    # Detecta el sistema operativo(SO).
-    # Para ejecutar el comando de limpieza de terminal de acuerdo al SO.
     so = platform.system()
 
     if so == "Windows":
@@ -138,31 +97,21 @@ def limpiar_consola():
         comando = "clear"
 
     os.system(comando)
-
+    
 
 def en_construccion():
     limpiar_consola()
     print("En construcción.")
     input("Presiona Enter para continuar... ")
+    
 
-
-"""
-opc: string
-"""
-
-
-def validar_continuacion(opc: str) -> str:
+def validar_continuacion(opc):
     while opc != "S" and opc != "N":
         opc = input("Opción incorrecta S o N: ").upper()
 
     limpiar_consola()
 
     return opc
-
-
-"""
-fecha: Arreglo de 0 a 2 de string
-"""
 
 
 def ingresar_fecha():
@@ -180,26 +129,12 @@ def ingresar_fecha():
     return fecha
 
 
-"""
-max_dia_febrero, dia, mes, anio: int
-es_valido: bool
-"""
-
-
-def validar_valores_fecha(dia: int, mes: int, anio: int) -> bool:
+def validar_valores_fecha(dia, mes, anio):
     es_valido = True
 
     if mes < 1 or mes > 12:
         es_valido = False
-    elif (
-        mes == 1
-        or mes == 3
-        or mes == 5
-        or mes == 7
-        or mes == 8
-        or mes == 10
-        or mes == 12
-    ) and (dia < 1 or dia > 31):
+    elif (mes == 1 or mes == 3 or mes == 5 or mes == 7 or mes == 8 or mes == 10 or mes == 12) and (dia < 1 or dia > 31):
         es_valido = False
     elif (mes == 4 or mes == 6 or mes == 9 or mes == 11) and (dia < 1 or dia > 30):
         es_valido = False
@@ -217,11 +152,6 @@ def validar_valores_fecha(dia: int, mes: int, anio: int) -> bool:
     return es_valido
 
 
-"""
-fecha: Arreglo de 0 a 2 de string
-"""
-
-
 def validar_fecha(fecha):
     while not (fecha[0].isdigit() and fecha[1].isdigit() and fecha[2].isdigit()):
         print("Los datos ingresados no son válidos")
@@ -235,23 +165,12 @@ def validar_fecha(fecha):
     input(fecha)
 
 
-"""
-edades: Arreglo de 0 a 5 de int
-ind: int
-"""
-
-
 def mostrar_edades(edades):
     for ind in range(6):
         print(f"- {edades[ind]} años")
 
 
-"""
-edad, edad_1, edad_2: int
-"""
-
-
-def mostrar_valores_faltantes(edad_1: int, edad_2: int):
+def mostrar_valores_faltantes(edad_1, edad_2):
     print("\nSe detectó un hueco.")
     print(f"Los valores faltantes entre {edad_1} y {edad_2} años son:\n")
 
@@ -259,12 +178,6 @@ def mostrar_valores_faltantes(edad_1: int, edad_2: int):
         print("-", edad)
 
     print("\n")
-
-
-"""
-edades: Arreglo de 0 a 5 de int
-cant_huecos, edad_1, edad_2, ind: int
-"""
 
 
 def detectar_huecos_entre_edades(edades):
@@ -279,17 +192,9 @@ def detectar_huecos_entre_edades(edades):
             mostrar_valores_faltantes(edad_1, edad_2)
 
     if cant_huecos != 0:
-        print(
-            f"Se encontraron {cant_huecos} huecos entre las edades de los 6 estudiantes."
-        )
+        print(f"Se encontraron {cant_huecos} huecos entre las edades de los 6 estudiantes.")
     else:
         print("No se encontrarón huecos entra las edades los 6 estudiantes.")
-
-
-"""
-edades: Arreglo de 0 a 5 de int
-aux, i, j: int
-"""
 
 
 def ordenar_edades_creciente(edades):
@@ -301,15 +206,7 @@ def ordenar_edades_creciente(edades):
                 edades[i] = aux
 
 
-"""
-fecha_nros: Arreglo de 0 a 2 de int
-fecha_actual: datetime
-fecha: str
-anio, dia, edad, mes: int
-"""
-
-
-def calcular_edad(fecha: str) -> int:
+def calcular_edad(fecha):
     fecha_actual = datetime.now()
     fecha_nros = obtener_valores_fecha(fecha)
 
@@ -322,11 +219,6 @@ def calcular_edad(fecha: str) -> int:
         edad = edad - 1
 
     return edad
-
-
-"""
-edades: Arreglo de 0 a 5 de int
-"""
 
 
 def huecos_edades():
@@ -344,14 +236,7 @@ def huecos_edades():
     input("Presiona Enter para volver al inicio...")
 
 
-"""
-fecha_nros: Arreglo de 0 a 2 de int
-fecha: str
-f: datetime
-"""
-
-
-def obtener_valores_fecha(fecha: str):
+def obtener_valores_fecha(fecha):
     fecha_nros = [0] * 3
 
     f = datetime.fromisoformat(fecha)
@@ -363,28 +248,14 @@ def obtener_valores_fecha(fecha: str):
     return fecha_nros
 
 
-"""
-fecha_nros: Arreglo de 0 a 2 de int
-fecha, formato_espaniol_nacimiento: str
-"""
-
-
-def formatear_fecha_espaniol(fecha: str) -> str:
+def formatear_fecha_espaniol(fecha):
     fecha_nros = obtener_valores_fecha(fecha)
-    formato_espaniol_nacimiento = (
-        str(fecha_nros[0]) + "/" + str(fecha_nros[1]) + "/" + str(fecha_nros[2])
-    )
+    formato_espaniol_nacimiento = (str(fecha_nros[0]) + "/" + str(fecha_nros[1]) + "/" + str(fecha_nros[2]))
 
     return formato_espaniol_nacimiento
 
 
-"""
-fecha: Arreglo de 0 a 2 de string
-f: date
-"""
-
-
-def solicitar_fecha_nacimiento() -> str:
+def solicitar_fecha_nacimiento():
     fecha = ingresar_fecha()
     validar_fecha(fecha)
 
@@ -393,25 +264,13 @@ def solicitar_fecha_nacimiento() -> str:
     return f.isoformat()
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-cant_est, cant_matcheos: int
-"""
-
-
 def matcheos_combinados(estudiantes, estados):
     limpiar_consola()
     cant_est = contar_estudiantes_activos(estudiantes[:], estados[:])
     cant_matcheos = cant_est * (cant_est - 1) // 2
 
-    print(
-        f"La cantidad de matcheos posibles entre los {cant_est} estudiantes actuales es igual a {cant_matcheos}."
-    )
+    print( f"La cantidad de matcheos posibles entre los {cant_est} estudiantes actuales es igual a {cant_matcheos}.")
     input("\nPresiona Enter para volver al inicio...")
-
-
-
 
 
 def ingresar_contrasenia():
@@ -423,17 +282,7 @@ def ingresar_contrasenia():
     return password
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-email: string
-ind: int
-valido: bool
-"""
-
-
-def email_existente(
-    email, estudiantes, moderadores):
+def email_existente(email, estudiantes, moderadores):
     valido = True
 
     ind = 0
@@ -453,16 +302,6 @@ def email_existente(
     return valido
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-estados: Arreglo de 0 a 7 de bool
-acceso_valido: Arreglo de 0 a 1 de string
-intentos, ind: int
-email, password: string
-"""
-
-
 def validar_acceso(acceso_valido, estudiantes, moderadores, estados):
     intentos = 3
 
@@ -471,9 +310,7 @@ def validar_acceso(acceso_valido, estudiantes, moderadores, estados):
         password = getpass("Ingrese su contraseña: ")
 
         ind = 0
-        while ind < 8 and (
-            estudiantes[ind][0] != email or estudiantes[ind][1] != password
-        ):
+        while ind < 8 and (estudiantes[ind][0] != email or estudiantes[ind][1] != password):
             ind = ind + 1
 
         if ind < 8 and estados[ind]:
@@ -481,9 +318,7 @@ def validar_acceso(acceso_valido, estudiantes, moderadores, estados):
             acceso_valido[1] = 1
         else:
             ind = 0
-            while ind < 4 and (
-                moderadores[ind][0] != email or moderadores[ind][1] != password
-            ):
+            while ind < 4 and (moderadores[ind][0] != email or moderadores[ind][1] != password):
                 ind = ind + 1
 
             if ind < 4:
@@ -500,16 +335,7 @@ def validar_acceso(acceso_valido, estudiantes, moderadores, estados):
     limpiar_consola()
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-estados: Arreglo de 0 a 7 de bool
-acceso_valido: Arreglo de 0 a 1 de int
-"""
-
-
-def log_in(
-    estudiantes, moderadores, estados):
+def log_in(estudiantes, moderadores, estados):
     acceso_valido = [-1] * 2
     intentos = 3
 
@@ -522,9 +348,7 @@ def log_in(
 
         ind = 0
         cant_estudiantes = contar_estudiantes_activos(estudiantes[:], estados[:])
-        while ind < cant_estudiantes and (
-            estudiantes[ind][0] != email or estudiantes[ind][1] != password
-        ):
+        while ind < cant_estudiantes and (estudiantes[ind][0] != email or estudiantes[ind][1] != password):
             ind = ind + 1
 
         if ind < cant_estudiantes:
@@ -533,9 +357,7 @@ def log_in(
         else:
             ind = 0
             cant_mod = contar_moderadores(moderadores)
-            while ind < 4 and (
-                moderadores[ind][0] != email or moderadores[ind][1] != password
-            ):
+            while ind < 4 and (moderadores[ind][0] != email or moderadores[ind][1] != password):
                 ind = ind + 1
 
             if ind < cant_mod:
@@ -552,15 +374,6 @@ def log_in(
     limpiar_consola()
 
     return acceso_valido
-
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-estados: Arreglo de 0 a 7 de bool
-decision, email, password, rol: string
-registrado: bool
-"""
 
 
 def registrar(estudiantes, moderadores, estados):
@@ -580,9 +393,7 @@ def registrar(estudiantes, moderadores, estados):
             rol = input("ingrese E (Estudiante) o M (Moderador): ")
 
         if rol == "E":
-            registrado = registrar_estudiante(
-                email, password, estudiantes, moderadores, estados
-            )
+            registrado = registrar_estudiante(email, password, estudiantes, moderadores, estados)
 
         elif rol == "M":
             registrado = registrar_moderador(email, password, estudiantes, moderadores)
@@ -596,11 +407,6 @@ def registrar(estudiantes, moderadores, estados):
 
 ### Estudiante ###
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-ind: int
-"""
-
 
 def contar_estudiantes(estudiantes):
     ind = 0
@@ -611,12 +417,7 @@ def contar_estudiantes(estudiantes):
     return ind
 
 
-"""
-prop, valor: string
-"""
-
-
-def ingresar_propiedad(prop: str) -> str:
+def ingresar_propiedad(prop):
     if prop == PROPS_ESTUDIANTE[4]:
         valor = input(f"Ingrese {GENERO[1]} o {GENERO[0]}: ")
 
@@ -633,23 +434,7 @@ def ingresar_propiedad(prop: str) -> str:
     return valor
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-estados: Arreglo de 0 a 7 de bool
-email, password: string
-cant, ind: int
-registrado: bool
-"""
-
-
-def registrar_estudiante(
-    email,
-    password,
-    estudiantes,
-    moderadores,
-    estados,
-):
+def registrar_estudiante(email, password, estudiantes, moderadores, estados):
     registrado = False
     cant = contar_estudiantes(estudiantes[:])
 
@@ -673,25 +458,11 @@ def registrar_estudiante(
     return registrado
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-est_id: int
-"""
-
-
-def validar_id_estudiante(est_id: int, estudiantes):
+def validar_id_estudiante(est_id, estudiantes):
     return 0 <= est_id and est_id <= contar_estudiantes(estudiantes[:])
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-cant, ind: int
-"""
-
-
-def contar_estudiantes_activos(
-    estudiantes, estados):
+def contar_estudiantes_activos(estudiantes, estados):
     cant = 0
     ind = 0
 
@@ -703,20 +474,7 @@ def contar_estudiantes_activos(
     return cant
 
 
-"""
-me_gusta: Arreglo multi de 8x8 de bool
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-cant, est_id, ind: int
-"""
-
-
-def contar_estudiantes_activos_no_matcheados(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta,
-):
+def contar_estudiantes_activos_no_matcheados(est_id, estudiantes, estados, me_gusta):
     cant = 0
     ind = 0
 
@@ -729,13 +487,6 @@ def contar_estudiantes_activos_no_matcheados(
     return cant
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-ind: int
-nombre: string
-"""
-
-
 def obtener_id_estudiante_por_nombre(nombre, estudiantes):
     ind = 0
 
@@ -744,13 +495,6 @@ def obtener_id_estudiante_por_nombre(nombre, estudiantes):
 
     return ind
 
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-est_id, ind: int
-"""
-
-
 def obtener_nombre_estudiante_por_id(est_id, estudiantes):
     ind = 0
 
@@ -758,13 +502,6 @@ def obtener_nombre_estudiante_por_id(est_id, estudiantes):
         ind = ind + 1
 
     return estudiantes[ind][2]
-
-
-"""
-estados: Arreglo de 0 a 7 de bool
-est_id: int
-opc: string
-"""
 
 
 def eliminar_perfil(est_id, estados):
@@ -779,22 +516,7 @@ def eliminar_perfil(est_id, estados):
         input("Presione Enter para continuar ")
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-estados: Arreglo de 0 a 7 de bool
-est_id, reporte_id, reporte_ind, reportado_id: int
-decision, motivo, opc, reportado: string
-"""
-
-
-def reportar_candidato(
-    est_id,
-    estudiantes,
-    estados,
-    reportes,
-    motivo_reportes):
+def reportar_candidato(est_id, estudiantes, estados, reportes, motivo_reportes):
     decision = ""
     reportado_id = -1
 
@@ -844,12 +566,6 @@ def reportar_candidato(
                 decision = validar_continuacion(decision)
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-est_id, ind: int
-"""
-
-
 def mostrar_datos_estudiante(est_id, estudiantes):
     print("Datos de usuario\n")
 
@@ -857,17 +573,7 @@ def mostrar_datos_estudiante(est_id, estudiantes):
         print(PROPS_ESTUDIANTE[ind - 2], ":", estudiantes[est_id][ind])
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-est_id: int
-opc: string
-"""
-
-
-def manejador_submenu_gestionar_perfil(
-    est_id, estudiantes, estados
-):
+def manejador_submenu_gestionar_perfil(est_id, estudiantes, estados):
     opc = ""
 
     while opc != "c" and estados[est_id]:
@@ -889,13 +595,6 @@ def manejador_submenu_gestionar_perfil(
             eliminar_perfil(est_id, estados)
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-nombre: string
-est_id: int
-"""
-
-
 def validar_nombre(nombre, estudiantes):
     est_id = obtener_id_estudiante_por_nombre(nombre, estudiantes[:])
 
@@ -907,21 +606,7 @@ def validar_nombre(nombre, estudiantes):
     return nombre
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-me_gusta: Arreglo multi de 8x8 de bool
-formato_espaniol_nacimiento: string
-edad, est_id, ind: int
-"""
-
-
-def ver_perfil_estudiante(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta,
-):
+def ver_perfil_estudiante(est_id, estudiantes, estados, me_gusta):
     ind = 0
 
     limpiar_consola()
@@ -945,28 +630,11 @@ def ver_perfil_estudiante(
 
         ind = ind + 1
 
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-me_gusta: Arreglo multi de 8x8 de bool
-est_id, match_id: int
-decision, nombre_estudiante: string
-"""
-
-
-def marcar_match(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta
-):
+def marcar_match(est_id, estudiantes, estados, me_gusta):
     decision = "S"
 
     if decision == "S":
-        nombre_estudiante = input(
-            "\nIngrese el nombre del estudiante con el que quiere hacer matcheo: "
-        )
+        nombre_estudiante = input("\nIngrese el nombre del estudiante con el que quiere hacer matcheo: ")
 
         nombre_estudiante = validar_nombre(nombre_estudiante, estudiantes[:])
         match_id = obtener_id_estudiante_por_nombre(nombre_estudiante, estudiantes[:])
@@ -983,28 +651,11 @@ def marcar_match(
         input("Presione Enter para continuar... ")
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-me_gusta: Arreglo multi de 8x8 de bool
-est_id: int
-decision, opc: string
-realizo_matcheo: bool
-"""
-
-
-def manejador_matcheo_estudiantes(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta,
-):
+def manejador_matcheo_estudiantes(est_id, estudiantes, estados, me_gusta):
     opc = ""
 
     ver_perfil_estudiante(est_id, estudiantes[:], estados[:], me_gusta[:])
-    decision = input(
-        "Le gustaría en un futuro hacer matcheo con algún estudiante. (S/N) "
-    ).upper()
+    decision = input("Le gustaría en un futuro hacer matcheo con algún estudiante. (S/N) ").upper()
 
     while decision != "S" and decision != "N":
         decision = input("Desea hacer matcheo con algún estudiante S o N: ").upper()
@@ -1020,25 +671,7 @@ def manejador_matcheo_estudiantes(
             opc = input("Realizar un nuevo match, S/N: ").upper()
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-me_gusta: Arreglo multi de 8x8 de bool
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-estados: Arreglo de 0 a 7 de bool
-opc: string
-est_id: int
-"""
-
-
-def manejador_submenu_gestionar_candidatos(
-    est_id,
-    reportes,
-    motivo_reportes,
-    estudiantes,
-    estados,
-    me_gusta
-):
+def manejador_submenu_gestionar_candidatos(est_id, reportes, motivo_reportes, estudiantes, estados, me_gusta):
     opc = ""
 
     while opc != "c":
@@ -1058,14 +691,7 @@ def manejador_submenu_gestionar_candidatos(
             manejador_matcheo_estudiantes(est_id, estudiantes[:], estados[:], me_gusta)
 
         if opc == "b":
-            reportar_candidato(
-                est_id, estudiantes[:], estados[:], reportes, motivo_reportes
-            )
-
-
-"""
-opc: string
-"""
+            reportar_candidato(est_id, estudiantes[:], estados[:], reportes, motivo_reportes)
 
 
 def manejador_submenu_matcheos():
@@ -1088,13 +714,6 @@ def manejador_submenu_matcheos():
             en_construccion()
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-est_id: int
-opc, valor: str
-"""
-
-
 def editar_datos_estudiante(est_id, estudiantes):
     opc = ""
 
@@ -1114,15 +733,7 @@ def editar_datos_estudiante(est_id, estudiantes):
         opc = input("Seleccione una opción: ")
 
         print("\n")
-        while (
-            opc != "a"
-            and opc != "b"
-            and opc != "c"
-            and opc != "d"
-            and opc != "e"
-            and opc != "f"
-            and opc != "n"
-        ):
+        while (opc != "a" and opc != "b" and opc != "c" and opc != "d" and opc != "e" and opc != "f" and opc != "n"):
             print("No es una opción válida.")
             opc = input("Ingrese una opción válida: ")
 
@@ -1147,22 +758,7 @@ def editar_datos_estudiante(est_id, estudiantes):
                 estudiantes[est_id][8] = valor
 
 
-"""
-estudiantes: Arreglo de multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-me_gusta: Arreglo multi de 8x8 de bool
-cant_estudiantes, est_id, ind, likes_dados, likes_recibidos, matches: int
-like_dado, like_recibido: bool
-porcentaje: float
-"""
-
-
-def reportes_estadisticos_estudiante(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta,
-):
+def reportes_estadisticos_estudiante(est_id, estudiantes, estados, me_gusta):
     likes_dados = 0
     likes_recibidos = 0
     matches = 0
@@ -1191,14 +787,6 @@ def reportes_estadisticos_estudiante(
     print("Likes dados y no recibidos:", likes_dados)
     print("Likes recibidos y no respondidos:", likes_recibidos)
     input("Presiona Enter para volver al menú... ")
-
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-decision, estudiante, opc: string
-est_id: int
-"""
 
 
 def desactivar_usuario(estudiantes, estados):
@@ -1237,22 +825,9 @@ def desactivar_usuario(estudiantes, estados):
         decision = validar_continuacion(decision)
 
 
-"""
-cand: Arreglo multi de 2x3 de int
-valores: Arreglo de 0 a 2 de int
-ind: int
-"""
-
-
 def calcular_eleccion_candidatos(valores, cand):
     for ind in range(3):
         valores[ind] = random.randint(0, 100) * cand[ind][1]
-
-
-"""
-candidatos: Arreglo multi de 2x3 de int
-est_id, ind: int
-"""
 
 
 def comprobar_nuevo_candidato(est_id, candidatos):
@@ -1264,12 +839,6 @@ def comprobar_nuevo_candidato(est_id, candidatos):
     return ind == 3
 
 
-"""
-cand: Arreglo multi de 2x3 de int
-ind, total: int
-"""
-
-
 def calcular_probabilidad_total_candidatos(cand):
     total = 0
 
@@ -1279,24 +848,11 @@ def calcular_probabilidad_total_candidatos(cand):
     return total
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-cand: Arreglo multi de 2x3 de int
-est_id, ind: int
-"""
-
-
 def mostrar_candidatos(cand, estudiantes):
     for ind in range(3):
         est_id = cand[ind][0]
 
         print(f"{ind + 1}. {obtener_nombre_estudiante_por_id(est_id, estudiantes[:])}")
-
-
-"""
-valores: Arreglo de 0 a 2 de int
-ind, mayor, pos, valor: int
-"""
 
 
 def buscar_candidato_mayor_valor(valores):
@@ -1313,73 +869,29 @@ def buscar_candidato_mayor_valor(valores):
     return pos
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-candidatos: Arreglo multi de 2x3 de int
-candidato_ind, cant_est_totales, est_id, usuario_id: int
-"""
-
-
 def obtener_candidatos(usuario_id, candidatos, estudiantes):
     for candidato_ind in range(3):
         cant_est_totales = contar_estudiantes(estudiantes[:])
         est_id = random.randint(0, cant_est_totales - 1)
 
-        while est_id == usuario_id or not comprobar_nuevo_candidato(
-            est_id, candidatos[:]
-        ):
+        while est_id == usuario_id or not comprobar_nuevo_candidato(est_id, candidatos[:]):
             est_id = random.randint(0, cant_est_totales - 1)
 
         candidatos[candidato_ind][0] = est_id
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-candidatos: Arreglo multi de 2x3 de int
-me_gusta: Arreglo multi de 8x8 de bool
-valores: Arreglo de 0 a 2 de int
-usuario_id, pos_elegido, pos_match, usuario: int
-nombre_match: string
-"""
-
-
-def matchear_candidato(usuario_id,
-    valores,
-    candidatos,
-    me_gusta,
-    estudiantes,
-):
+def matchear_candidato(usuario_id, valores, candidatos, me_gusta, estudiantes):
     pos_elegido = buscar_candidato_mayor_valor(valores[:])
 
-    nombre_match = obtener_nombre_estudiante_por_id(
-        candidatos[pos_elegido][0], estudiantes[:]
-    )
+    nombre_match = obtener_nombre_estudiante_por_id(candidatos[pos_elegido][0], estudiantes[:])
     pos_match = candidatos[pos_elegido][0]
     me_gusta[usuario_id][pos_match] = True
 
     print("\nTu match es la persona", nombre_match)
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-me_gusta: Arreglo multi de 8x8 de bool
-candidatos: Arreglo multi de 2x3 de int
-estados: Arreglo de 0 a 7 de bool
-valores_eleccion_candidatos: Arreglo de 0 a 2 de int
-continuar, valor: string
-cant_est_posibles, probabilidad_ingresada, probabilidad_match_1, probabilidad_match_2, probabilidad_match_3, usuario_id: int
-"""
-
-
-def ruleta(
-    usuario_id,
-    estudiantes,
-    estados,
-    me_gusta,
-):
-    cant_est_posibles = contar_estudiantes_activos_no_matcheados(
-        usuario_id, estudiantes[:], estados[:], me_gusta[:]
-    )
+def ruleta(usuario_id, estudiantes, estados, me_gusta):
+    cant_est_posibles = contar_estudiantes_activos_no_matcheados(usuario_id, estudiantes[:], estados[:], me_gusta[:])
 
     if cant_est_posibles < 3:
         print("No hay suficientes estudiantes activos para esta función.")
@@ -1393,9 +905,7 @@ def ruleta(
             obtener_candidatos(usuario_id, candidatos, estudiantes[:])
 
             print("........RULETA........")
-            print(
-                "A continuación, se le pedirá ingresar la probabilidad de matcheo con tres estudiantes."
-            )
+            print("A continuación, se le pedirá ingresar la probabilidad de matcheo con tres estudiantes.")
             print("Los valores ingresados deben ser enteros y su suma igual a 100.\n")
 
             while calcular_probabilidad_total_candidatos(candidatos[:]) != 100:
@@ -1403,44 +913,28 @@ def ruleta(
 
                 print("\n")
                 for probabilidad_ingresada in range(3):
-                    valor = input(
-                        f"Ingresar la probabilidad del estudiante {probabilidad_ingresada + 1}: "
-                    )
+                    valor = input(f"Ingresar la probabilidad del estudiante {probabilidad_ingresada + 1}: ")
 
                     while not valor.isnumeric():
                         valor = input("Por favor ingrese un valor numérico entero: ")
 
                     candidatos[probabilidad_ingresada][1] = int(valor)
 
-                probabilidad_total = calcular_probabilidad_total_candidatos(
-                    candidatos[:]
-                )
+                probabilidad_total = calcular_probabilidad_total_candidatos(candidatos[:])
 
                 if probabilidad_total != 100:
                     limpiar_consola()
-                    print(
-                        "La probabilidad total debe ser igual a 100 y el introducido es",
-                        probabilidad_total,
-                        ".",
-                    )
+                    print("La probabilidad total debe ser igual a 100 y el introducido es", probabilidad_total, ".")
                     print("Vuelva a introducir los valores.\n")
 
             valores_eleccion_candidatos = [0] * 3
 
             calcular_eleccion_candidatos(valores_eleccion_candidatos, candidatos[:])
-            matchear_candidato(
-                usuario_id,
-                valores_eleccion_candidatos[:],
-                candidatos[:],
-                me_gusta,
-                estudiantes[:],
-            )
+            matchear_candidato(usuario_id, valores_eleccion_candidatos[:], candidatos[:], me_gusta, estudiantes[:])
 
             continuar = input("Usar la ruleta nuevamente. S/N ").upper()
             continuar = validar_continuacion(continuar)
-            cant_est_posibles = contar_estudiantes_activos_no_matcheados(
-                usuario_id, estudiantes[:], estados[:], me_gusta[:]
-            )
+            cant_est_posibles = contar_estudiantes_activos_no_matcheados(usuario_id, estudiantes[:], estados[:], me_gusta[:])
 
         if cant_est_posibles < 3 and continuar == "S":
             print("No hay suficientes estudiantes activos para esta función.")
@@ -1448,12 +942,6 @@ def ruleta(
 
 
 ### Reporte ###
-
-"""
-reportes: Arreglo multi de 3x40 de int
-ind: int
-"""
-
 
 def contar_reportes(reportes):
     ind = 0
@@ -1464,41 +952,15 @@ def contar_reportes(reportes):
     return ind
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de sring
-nombre_reportante, nombre_reportado: string
-reporte_id: int
-"""
-
-
-def mostrar_reporte(
-    reporte_id,
-    reportes,
-    motivo_reportes,
-    estudiantes,
-):
-    nombre_reportante = obtener_nombre_estudiante_por_id(
-        reportes[reporte_id][1], estudiantes[:]
-    )
-    nombre_reportado = obtener_nombre_estudiante_por_id(
-        reportes[reporte_id][2], estudiantes[:]
-    )
+def mostrar_reporte(reporte_id, reportes,  motivo_reportes, estudiantes):
+    nombre_reportante = obtener_nombre_estudiante_por_id(reportes[reporte_id][1], estudiantes[:])
+    nombre_reportado = obtener_nombre_estudiante_por_id(reportes[reporte_id][2], estudiantes[:])
 
     print(f"........Reporte {reporte_id + 1}........\n")
     print("Reportante:", nombre_reportante)
     print("Reportado:", nombre_reportado)
     print(f"Motivo:\n\t{motivo_reportes[reporte_id]}\n\n")
-
-
-"""
-reportes: Arreglo multi de 3x40 de int
-estados: Arreglo de 0 a 7 de bool
-opc: string
-ind, reportado_id, reporte_id: int
-"""
-
+    
 
 def procesar_reporte(reporte_id, reportes, estados):
     print("Procesamiento de reporte\n")
@@ -1525,24 +987,7 @@ def procesar_reporte(reporte_id, reportes, estados):
             ind = ind + 1
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-reporte: Arreglo de 0 a 4 de string
-cant_reportes, ind: int
-opc: string
-estudiantes_activos: bool
-"""
-
-
-def ver_reportes(
-    reportes,
-    motivo_reportes,
-    estudiantes,
-    estados,
-):
+def ver_reportes(reportes, motivo_reportes, estudiantes, estados):
     ind = 0
     opc = ""
 
@@ -1569,11 +1014,6 @@ def ver_reportes(
 
 ### Moderador ###
 
-"""
-moderadores: Arreglo multi de 2x4 de string
-ind: int
-"""
-
 
 def contar_moderadores(moderadores):
     ind = 0
@@ -1584,21 +1024,7 @@ def contar_moderadores(moderadores):
     return ind
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-email, password: string
-registrado: bool
-cant: int
-"""
-
-
-def registrar_moderador(
-    email,
-    password,
-    estudiantes,
-    moderadores,
-):
+def registrar_moderador(email, password, estudiantes, moderadores):
     registrado = False
     cant = contar_moderadores(moderadores[:])
 
@@ -1615,13 +1041,6 @@ def registrar_moderador(
     input("Presione Enter para continuar...")
 
     return registrado
-
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-opc: string
-"""
 
 
 def manejador_submenu_gestionar_usuarios(estudiantes, estados):
@@ -1643,20 +1062,7 @@ def manejador_submenu_gestionar_usuarios(estudiantes, estados):
             desactivar_usuario(estudiantes[:], estados)
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-opc: string
-"""
-
-
-def manejador_submenu_gestionar_reportes(
-    estudiantes,
-    reportes,
-    motivo_reportes,
-    estados,
-):
+def manejador_submenu_gestionar_reportes(estudiantes, reportes, motivo_reportes, estados):
     opc = ""
 
     while opc != "b":
@@ -1676,10 +1082,6 @@ def manejador_submenu_gestionar_reportes(
 
 
 ### Mostrar ###
-
-"""
-opcion: string
-"""
 
 
 def mostrar_menu_principal_estudiante():
@@ -1713,11 +1115,6 @@ def mostrar_menu_principal_estudiante():
     return opcion
 
 
-"""
-opc: string
-"""
-
-
 def mostrar_menu_principal_moderadores():
     limpiar_consola()
 
@@ -1736,38 +1133,11 @@ def mostrar_menu_principal_moderadores():
     return opc
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-me_gusta: Arreglo multi de 8x8 de bool
-estados: Arreglo de 0 a 7 de bool
-rol, usuario_id: int
-"""
-
-
-def mostrar_menu_usuario(
-    usuario_id,
-    rol,
-    estudiantes,
-    estados,
-    me_gusta,
-    reportes,
-    motivo_reportes,
-):
+def mostrar_menu_usuario(usuario_id, rol, estudiantes, estados, me_gusta, reportes, motivo_reportes):
     if rol == 0:
-        gestionador_menu_principal_estudiante(
-            usuario_id, estudiantes, estados, me_gusta, reportes, motivo_reportes
-        )
+        gestionador_menu_principal_estudiante(usuario_id, estudiantes, estados, me_gusta, reportes, motivo_reportes)
     elif rol == 1:
-        manejador_menu_principal_moderador(
-            reportes, motivo_reportes, estudiantes, estados
-        )
-
-
-"""
-opcion: string
-"""
+        manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, estados)
 
 
 def mostrar_menu_principal():
@@ -1789,25 +1159,8 @@ def mostrar_menu_principal():
 
 ### Gestionar ###
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-estados: Arreglo de 0 a 7 de bool
-me_gusta: Arreglo multi de 8x8 de bool
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-est_id: int
-opc: string
-"""
 
-
-def gestionador_menu_principal_estudiante(
-    est_id,
-    estudiantes,
-    estados,
-    me_gusta,
-    reportes,
-    motivo_reportes,
-):
+def gestionador_menu_principal_estudiante(est_id, estudiantes, estados, me_gusta, reportes, motivo_reportes):
     opc = ""
 
     while opc != "0" and estados[est_id]:
@@ -1818,17 +1171,13 @@ def gestionador_menu_principal_estudiante(
                 manejador_submenu_gestionar_perfil(est_id, estudiantes, estados)
 
             case "2":
-                manejador_submenu_gestionar_candidatos(
-                    est_id, reportes, motivo_reportes, estudiantes, estados, me_gusta
-                )
+                manejador_submenu_gestionar_candidatos(est_id, reportes, motivo_reportes, estudiantes, estados, me_gusta)
 
             case "3":
                 manejador_submenu_matcheos()
 
             case "4":
-                reportes_estadisticos_estudiante(
-                    est_id, estudiantes[:], estados[:], me_gusta[:]
-                )
+                reportes_estadisticos_estudiante(est_id, estudiantes[:], estados[:], me_gusta[:])
 
             case "5":
                 ruleta(est_id, estudiantes[:], estados[:], me_gusta)
@@ -1843,21 +1192,7 @@ def gestionador_menu_principal_estudiante(
                 limpiar_consola()
 
 
-"""
-estudiantes: Arreglo multi de 9x8 de string
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-estados: Arreglo de 0 a 7 de bool
-opc: string
-"""
-
-
-def manejador_menu_principal_moderador(
-    reportes,
-    motivo_reportes,
-    estudiantes,
-    estados,
-):
+def manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, estados):
     opc = "1"
 
     while opc != "0":
@@ -1868,9 +1203,7 @@ def manejador_menu_principal_moderador(
                 manejador_submenu_gestionar_usuarios(estudiantes, estados)
 
             case "2":
-                manejador_submenu_gestionar_reportes(
-                    estudiantes, reportes, motivo_reportes, estados
-                )
+                manejador_submenu_gestionar_reportes(estudiantes, reportes, motivo_reportes, estados)
 
             case "3":
                 en_construccion()
@@ -1878,18 +1211,6 @@ def manejador_menu_principal_moderador(
             case "0":
                 limpiar_consola()
                 print("¡Hasta luego!")
-
-
-"""
-estudiantes: Arreglo multi de 9x8 de string
-moderadores: Arreglo multi de 2x4 de string
-me_gusta: Arreglo multi de 8x8 de bool
-reportes: Arreglo multi de 3x40 de int
-motivo_reportes: Arreglo de 0 a 39 de string
-usuario: Arreglo de 0 a 1 de int
-estados: Arreglo de 0 a 7 de bool
-opc: string
-"""
 
 
 def main():
@@ -1916,15 +1237,7 @@ def main():
             case "1":
                 usuario = log_in(estudiantes[:], moderadores[:], estados[:])
                 if usuario[0] != -1:
-                    mostrar_menu_usuario(
-                        usuario[0],
-                        usuario[1],
-                        estudiantes,
-                        estados,
-                        me_gusta,
-                        reportes,
-                        motivo_reportes,
-                    )
+                    mostrar_menu_usuario(usuario[0], usuario[1], estudiantes, estados, me_gusta, reportes, motivo_reportes)
             case "2":
                 registrar(estudiantes, moderadores, estados)
 
