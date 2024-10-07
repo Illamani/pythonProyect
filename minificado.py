@@ -1,91 +1,249 @@
+#region Imports
 from datetime import date, datetime
 from getpass import getpass
 import os, platform, random
-
-"""
-Notas:
-
-No anda el cambio de años
-
-"""
+import pickle
+#endregion
 
 GENERO = ["F", "M"]
 PROPS_ESTUDIANTE = ["Nombre","Nacimiento","Biografía","Hobbies","Género","Ciudad","País",]
 
+#region formateos
+def formatearEstudiante(estudiante):
+    estudiante.email = estudiante.email.ljust(32, ' ')
+    estudiante.contrasenia =  estudiante.contrasenia.ljust(32, ' ')
+    estudiante.nombre = estudiante.nombre.ljust(32, ' ')
+    estudiante.fecha_nacimiento = estudiante.fecha_nacimiento.ljust(10, ' ')
+    estudiante.biografia = estudiante.biografia.ljust(255, ' ')
+    estudiante.hobbies = estudiante.hobbies.ljust(255, ' ')
+    estudiante.sexo = estudiante.sexo.ljust(1, ' ')
+    estudiante.ciudad = estudiante.ciudad.ljust(32, ' ')
+    estudiante.pais = estudiante.pais.ljust(32, ' ')
 
+
+def formatearModerador(moderador):
+    moderador.email =  moderador.email.ljust(32, ' ')
+    moderador.contrasenia = moderador.contrasenia.ljust(32, ' ')
+
+def formatearReporte(reporte):
+    reporte.razon_reporte = reporte.razon_reporte.ljust(255, ' ')
+
+#endregion
+
+#region Declaracion de Clases
+...
+class ESTUDIANTE:
+    def __init__(self):
+        self.id_estudiante = 0,
+        self.email = "",
+        self.nombre = "",
+        self.sexo = '',
+        self.contrasenia = "",
+        self.estado = False,
+        self.hobbies = "",
+        self.materia_favorita = "",
+        self.deporte_favorito = "",
+        self.materia_fuerta = "",
+        self.materia_debil = "",
+        self.biografia = "",
+        self.pais = "",
+        self.ciudad = "",
+        self.fecha_nacimiento = ""
+
+class MODERADOR:
+    def __init__(self):
+        self.id_moderadores = 0,
+        self.email = "",
+        self.contrasenia = "",
+        self.estado = False
+
+class ADMINISTRADOR:
+    def __init__(self):
+        self.id_admin = 0,
+        self.email = "",
+        self.contrasenia = ""
+
+class LIKE:
+    def __init__(self):
+        self.remitente = 0,
+        self.destinatario = 0
+
+class REPORTE:
+    def __init__(self):
+        self.id_reportante = 0,
+        self.id_reportado = 0,
+        self.razon_reporte = "",
+        self.estado = 0
+
+#endregion
+
+#region InicializarMocks
 def inicializar_likes_mock(likes):
-	for i in range(8):
-		for j in range(8):
-			likes[i][j] = random.choice([True, False])
+    for i in range(8):
+        for j in range(8):
+            likes[i][j] = random.choice([True, False])
 
 
-def inicializar_estudiantes_mock(estudiantes, estados):
-    estudiantes[0][0] = "estudiante1@ayed.com"
-    estudiantes[0][1] = "111222"
-    estudiantes[0][2] = "Juan Peréz"
-    estudiantes[0][3] = "2001-10-01"
-    estudiantes[0][4] = "Juan Peréz es un estudiante de informática apasionado por la programación. Le encanta aprender nuevos lenguajes y tecnologías."
-    estudiantes[0][5] = "Lectura - Senderismo - Juegos de mesa"
-    estudiantes[0][6] = GENERO[1]
-    estudiantes[0][7] = "Rosario"
-    estudiantes[0][8] = "Argentina"
-    estados[0] = True
+def inicializar_estudiantes_mock(regEstudiante):
+    estudiante1 = ESTUDIANTE()
+    estudiante1.email = "estudiante1@ayed.com"
+    estudiante1.contrasenia = "111222"
+    estudiante1.nombre = "Juan Peréz"
+    estudiante1.fecha_nacimiento = "2001-10-01"
+    estudiante1.biografia = "Juan Peréz es un estudiante de informática apasionado por la programación. Le encanta aprender nuevos lenguajes y tecnologías."
+    estudiante1.hobbies = "Lectura - Senderismo - Juegos de mesa"
+    estudiante1.sexo = GENERO[1]
+    estudiante1.ciudad = "Rosario"
+    estudiante1.pais = "Argentina"
+    estudiante1.estado = True
 
-    estudiantes[1][0] = "estudiante2@ayed.com"
-    estudiantes[1][1] = "333444"
-    estudiantes[1][2] = "María García"
-    estudiantes[1][3] = "1998-04-11"
-    estudiantes[1][4] = "María García es una estudiante de arte con una pasión por la pintura y el dibujo desde una edad temprana. Actualmente está explorando nuevas formas de expresión artística."
-    estudiantes[1][5] = "Pintura al óleo - Dibujo de retratos - Lectura de novelas históricas"
-    estudiantes[1][6] = "España"
-    estudiantes[1][7] = GENERO[0]
-    estudiantes[1][8] = "Madrid"
-    estados[1] = True
+    formatearEstudiante(estudiante1)
 
-    estudiantes[2][0] = "estudiante3@ayed.com"
-    estudiantes[2][1] = "555666"
-    estudiantes[2][2] = "Carlos Martínez"
-    estudiantes[2][3] = "2005-06-30"
-    estudiantes[2][4] = "Carlos Martínez es un estudiante de medicina enfocado en la investigación de enfermedades infecciosas. Su objetivo es contribuir al desarrollo de tratamientos más efectivos y accesibles."
-    estudiantes[2][5] = "Correr - Tocar la guitarra - Cocinar platos internacionales"
-    estudiantes[2][6] = "Bolivia"
-    estudiantes[2][7] = GENERO[1]
-    estudiantes[2][8] = "La Paz"
-    estados[2] = True
+    pickle.dump(estudiante1, regEstudiante)
+    regEstudiante.flush()
 
-    estudiantes[3][0] = "estudiante4@ayed.com"
-    estudiantes[3][1] = "789101"
-    estudiantes[3][2] = "Ana López"
-    estudiantes[3][3] = "2001-09-15"
-    estudiantes[3][4] = "Ana López es una estudiante de ingeniería informática interesada en la inteligencia artificial y la ciberseguridad. Aspira a desarrollar tecnologías innovadoras que mejoren la seguridad digital."
-    estudiantes[3][5] = "Leer ciencia ficción - Pintar - Practicar yoga"
-    estudiantes[3][6] = "Paraguay"
-    estudiantes[3][7] = GENERO[0]
-    estudiantes[3][8] = "Asunción"
-    estados[3] = True
+    estudiante2 = ESTUDIANTE()
+    estudiante2.email = "estudiante2@ayed.com"
+    estudiante2.contrasenia = "333444"
+    estudiante2.nombre = "María García"
+    estudiante2.fecha_nacimiento = "1998-04-11"
+    estudiante2.biografia = "María García es una estudiante de arte con una pasión por la pintura y el dibujo desde una edad temprana. Actualmente está explorando nuevas formas de expresión artística."
+    estudiante2.hobbies = "Pintura al óleo - Dibujo de retratos - Lectura de novelas históricas"
+    estudiante2.pais = "España"
+    estudiante2.sexo = GENERO[0]
+    estudiante2.ciudad = "Madrid"
+    estudiante2.estado = True
+
+    formatearEstudiante(estudiante2)
+
+    pickle.dump(estudiante2, regEstudiante)
+    regEstudiante.flush()
+
+    estudiante3 = ESTUDIANTE()
+    estudiante3.email = "estudiante3@ayed.com"
+    estudiante3.contrasenia = "555666"
+    estudiante3.nombre = "Carlos Martínez"
+    estudiante3.fecha_nacimiento = "2005-06-30"
+    estudiante3.biografia = "Carlos Martínez es un estudiante de medicina enfocado en la investigación de enfermedades infecciosas. Su objetivo es contribuir al desarrollo de tratamientos más efectivos y accesibles."
+    estudiante3.hobbies = "Correr - Tocar la guitarra - Cocinar platos internacionales"
+    estudiante3.pais = "Bolivia"
+    estudiante3.sexo = GENERO[1]
+    estudiante3.ciudad = "La Paz"
+    estudiante3.estado = True
+
+    formatearEstudiante(estudiante3)
+
+    pickle.dump(estudiante3, regEstudiante)
+    regEstudiante.flush()
+
+    estudiante4 = ESTUDIANTE()
+    estudiante4.email = "estudiante4@ayed.com"
+    estudiante4.contrasenia = "789101"
+    estudiante4.nombre = "Ana López"
+    estudiante4.fecha_nacimiento = "2001-09-15"
+    estudiante4.biografia = "Ana López es una estudiante de ingeniería informática interesada en la inteligencia artificial y la ciberseguridad. Aspira a desarrollar tecnologías innovadoras que mejoren la seguridad digital."
+    estudiante4.hobbies = "Leer ciencia ficción - Pintar - Practicar yoga"
+    estudiante4.pais = "Paraguay"
+    estudiante4.sexo = GENERO[0]
+    estudiante4.ciudad = "Asunción"
+    estudiante4.estado = True
     
 
-def inicializar_moderadores_mock(mod):
-    mod[0][0] = "moderador1@ayed.com"
-    mod[0][1] = "111222"
+def inicializar_moderadores_mock(regModerador):
+    moderador = MODERADOR()
+    moderador.email = "moderador1@ayed.com"
+    moderador.contrasenia = "111222"
+    moderador.estado = 1
+
+    formatearModerador(moderador)
+    pickle.dump(moderador, regModerador)
+    regModerador.flush()
+
+def inicializar_reportes_mock(regReportes):
+    reporte1 = REPORTE()
+    reporte1.estado = 0
+    reporte1.id_reportante = 1
+    reporte1.id_reportado = 2
+    reporte1.razon_reporte = "Motivo 1"
+
+    formatearModerador(reporte1)
+    pickle.dump(reporte1, regReportes)
+    regReportes.flush()
+
+    reporte2 = REPORTE()
+    reporte2.estado = 0
+    reporte2.id_reportante = 2
+    reporte2.id_reportado = 3
+    reporte2.razon_reporte = "Motivo 2"
+    formatearReporte(reporte2)
+    pickle.dump(reporte2, regReportes)
+    regReportes.flush()
+
+    reporte3 = REPORTE()
+    reporte3.estado = 0
+    reporte3.id_reportante = 4
+    reporte3.id_reportado = 2
+    reporte3.razon_reporte = "Motivo 3"
+    formatearReporte(reporte3)
+    pickle.dump(reporte3, regReportes)
+    regReportes.flush()
+
+#endregion
+
+#region Abrir y Cerrar Archivos
+rutaCarpetaDatos = "./carpetaDatos"
+rutaEstudiante = "./carpetaDatos/ESTUDIANTES.DAT"
+rutaModeradores = "./carpetaDatos/MODERADORES.DAT"
+rutaAdministradores = "./carpetaDatos/ADMINISTRADORES.DAT"
+rutaLikes = "./carpetaDatos/LIKES.DAT"
+rutaReportes = "./carpetaDatos/REPORTES.DAT"
+
+def AbrirArchivo(rutaCarpetaDatos, rutaEstudiante, rutaModeradores, rutaAdministradores, rutaLikes, rutaReportes):
+    global primeraVez
+    global regEstudiantes, regModeradores, regAdministradores, regLikes, regReportes
+
+    if not os.path.exists(rutaCarpetaDatos):
+        os.makedirs(rutaCarpetaDatos)
     
+    if (os.path.exists(rutaEstudiante) == False):
+        regEstudiantes = open(rutaEstudiante, "w+b")
+        inicializar_estudiantes_mock(regEstudiantes)
+    elif(os.path.exists(rutaEstudiante) == True):
+        regEstudiantes = open(rutaEstudiante, "r+b")
+    
+    if (os.path.exists(rutaModeradores) == False):
+        regModeradores = open(rutaModeradores, "w+b")
+        inicializar_moderadores_mock(regAdministradores)
+        primeraVez = 1
+    elif(os.path.exists(rutaModeradores) == True):
+        regModeradores = open(rutaModeradores, "r+b")
 
-def inicializar_reportes_mock(reportes, motivo_reportes):
-    reportes[0][0] = 0
-    reportes[0][1] = 1
-    reportes[0][2] = 2
-    motivo_reportes[0] = "Motivo 1"
+    if (os.path.exists(rutaAdministradores) == False):
+        regAdministradores = open(rutaAdministradores, "w+b")
+        primeraVez = 1
+    elif(os.path.exists(rutaAdministradores) == True):
+        regAdministradores = open(rutaAdministradores, "r+b")    
+    
+    if (os.path.exists(rutaLikes) == False):
+        regLikes = open(rutaLikes, "w+b")
+        primeraVez = 1
+    elif(os.path.exists(rutaLikes) == True):
+        regLikes = open(rutaLikes, "r+b")    
 
-    reportes[1][0] = 0
-    reportes[1][1] = 2
-    reportes[1][2] = 3
-    motivo_reportes[1] = "Motivo 2"
+    if (os.path.exists(rutaReportes) == False):
+        regReportes = open(rutaReportes, "w+b")
+        primeraVez = 1
+    elif(os.path.exists(rutaReportes) == True):
+        regReportes = open(rutaReportes, "r+b")
 
-    reportes[2][0] = 0
-    reportes[2][1] = 4
-    reportes[2][2] = 2
-    motivo_reportes[2] = "Motivo 3"
+def CerrarArchivo(regEstudiantes, regModeradores, regAdministradores, regLikes, regReportes):
+    regEstudiantes.close()
+    regModeradores.close()
+    regAdministradores.close()
+    regLikes.close()
+    regReportes.close()
 
+#endregion
 
 ### Registro y Conexión ###
 
@@ -1219,17 +1377,12 @@ def manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, e
 
 def main():
     likes = [[0] * 8 for n in range(8)]
-    estudiantes = [[""] * 9 for n in range(8)]
+    estudiantes = [estudiantes for n in range(8)]
     moderadores = [[""] * 2 for n in range(4)]
     me_gusta = [[False] * 8 for n in range(8)]
     reportes = [[-1] * 3 for n in range(40)]
     motivo_reportes = [""] * 40
     estados = [False] * 8    
-
-    inicializar_likes_mock(me_gusta)
-    inicializar_estudiantes_mock(estudiantes, estados)
-    inicializar_moderadores_mock(moderadores)
-    inicializar_reportes_mock(reportes, motivo_reportes)
 
     opc = ""
     usuario = [0] * 2
