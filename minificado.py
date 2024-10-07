@@ -86,8 +86,9 @@ def inicializar_likes_mock(likes):
 
 def inicializar_estudiantes_mock(regEstudiante):
     estudiante1 = ESTUDIANTE()
-    estudiante1.email = "estudiante1@ayed.com"
-    estudiante1.contrasenia = "111222"
+    estudiante1.id_estudiante = 0
+    estudiante1.email = "estudiante1"
+    estudiante1.contrasenia = "123"
     estudiante1.nombre = "Juan Peréz"
     estudiante1.fecha_nacimiento = "2001-10-01"
     estudiante1.biografia = "Juan Peréz es un estudiante de informática apasionado por la programación. Le encanta aprender nuevos lenguajes y tecnologías."
@@ -103,8 +104,9 @@ def inicializar_estudiantes_mock(regEstudiante):
     regEstudiante.flush()
 
     estudiante2 = ESTUDIANTE()
-    estudiante2.email = "estudiante2@ayed.com"
-    estudiante2.contrasenia = "333444"
+    estudiante2.id_estudiante = 1
+    estudiante2.email = "estudiante2"
+    estudiante2.contrasenia = "123"
     estudiante2.nombre = "María García"
     estudiante2.fecha_nacimiento = "1998-04-11"
     estudiante2.biografia = "María García es una estudiante de arte con una pasión por la pintura y el dibujo desde una edad temprana. Actualmente está explorando nuevas formas de expresión artística."
@@ -120,8 +122,9 @@ def inicializar_estudiantes_mock(regEstudiante):
     regEstudiante.flush()
 
     estudiante3 = ESTUDIANTE()
-    estudiante3.email = "estudiante3@ayed.com"
-    estudiante3.contrasenia = "555666"
+    estudiante3.email = "estudiante3"
+    estudiante3.id_estudiante = 2
+    estudiante3.contrasenia = "123"
     estudiante3.nombre = "Carlos Martínez"
     estudiante3.fecha_nacimiento = "2005-06-30"
     estudiante3.biografia = "Carlos Martínez es un estudiante de medicina enfocado en la investigación de enfermedades infecciosas. Su objetivo es contribuir al desarrollo de tratamientos más efectivos y accesibles."
@@ -137,8 +140,9 @@ def inicializar_estudiantes_mock(regEstudiante):
     regEstudiante.flush()
 
     estudiante4 = ESTUDIANTE()
-    estudiante4.email = "estudiante4@ayed.com"
-    estudiante4.contrasenia = "789101"
+    estudiante4.email = "estudiante4"
+    estudiante4.id_estudiante = 3
+    estudiante4.contrasenia = "123"
     estudiante4.nombre = "Ana López"
     estudiante4.fecha_nacimiento = "2001-09-15"
     estudiante4.biografia = "Ana López es una estudiante de ingeniería informática interesada en la inteligencia artificial y la ciberseguridad. Aspira a desarrollar tecnologías innovadoras que mejoren la seguridad digital."
@@ -151,8 +155,9 @@ def inicializar_estudiantes_mock(regEstudiante):
 
 def inicializar_moderadores_mock(regModerador):
     moderador = MODERADOR()
-    moderador.email = "moderador1@ayed.com"
-    moderador.contrasenia = "111222"
+    moderador.id_moderadores = 0
+    moderador.email = "moderador1"
+    moderador.contrasenia = "123"
     moderador.estado = 1
 
     formatearModerador(moderador)
@@ -166,7 +171,7 @@ def inicializar_reportes_mock(regReportes):
     reporte1.id_reportado = 2
     reporte1.razon_reporte = "Motivo 1"
 
-    formatearModerador(reporte1)
+    formatearReporte(reporte1)
     pickle.dump(reporte1, regReportes)
     regReportes.flush()
 
@@ -213,7 +218,7 @@ def AbrirArchivo(rutaCarpetaDatos, rutaEstudiante, rutaModeradores, rutaAdminist
     
     if (os.path.exists(rutaModeradores) == False):
         regModeradores = open(rutaModeradores, "w+b")
-        inicializar_moderadores_mock(regAdministradores)
+        inicializar_moderadores_mock(regModeradores)
         primeraVez = 1
     elif(os.path.exists(rutaModeradores) == True):
         regModeradores = open(rutaModeradores, "r+b")
@@ -232,6 +237,7 @@ def AbrirArchivo(rutaCarpetaDatos, rutaEstudiante, rutaModeradores, rutaAdminist
 
     if (os.path.exists(rutaReportes) == False):
         regReportes = open(rutaReportes, "w+b")
+        inicializar_reportes_mock(regReportes)
         primeraVez = 1
     elif(os.path.exists(rutaReportes) == True):
         regReportes = open(rutaReportes, "r+b")
@@ -245,8 +251,7 @@ def CerrarArchivo(regEstudiantes, regModeradores, regAdministradores, regLikes, 
 
 #endregion
 
-### Registro y Conexión ###
-
+#region validaciones y Shareds
 
 def limpiar_consola():
     so = platform.system()
@@ -494,36 +499,40 @@ def validar_acceso(acceso_valido, estudiantes, moderadores, estados):
         input("Presione Enter para continuar... ")
     limpiar_consola()
 
-
-def log_in(estudiantes, moderadores, estados):
+def log_in():
     acceso_valido = [-1] * 2
     intentos = 3
+    encontrado = False
 
     limpiar_consola()
     print("\n........Ingreso........\n")
 
     while intentos > 0 and acceso_valido[0] == -1:
-        email = input("Ingrese su email: ")
-        password = getpass("Ingrese su contraseña: ")
-
+        email = input("Ingrese su email: ").ljust(32, ' ')
+        password = getpass("Ingrese su contraseña: ").ljust(32, ' ')
         ind = 0
-        cant_estudiantes = contar_estudiantes_activos(estudiantes[:], estados[:])
-        while ind < cant_estudiantes and (estudiantes[ind][0] != email or estudiantes[ind][1] != password):
-            ind = ind + 1
-
-        if ind < cant_estudiantes:
-            acceso_valido[0] = ind
-            acceso_valido[1] = 0
-        else:
-            ind = 0
-            cant_mod = contar_moderadores(moderadores)
-            while ind < 4 and (moderadores[ind][0] != email or moderadores[ind][1] != password):
-                ind = ind + 1
-
-            if ind < cant_mod:
+        regEstudiantes.seek(0,0)
+        while(regEstudiantes.tell() < os.path.getsize(rutaEstudiante)):
+            est = pickle.load(regEstudiantes)
+            if(email == est.email and password == est.contrasenia and est.estado == True):
                 acceso_valido[0] = ind
-                acceso_valido[1] = 1
-            else:
+                acceso_valido[1] = 0
+                encontrado = True
+            if encontrado == False:
+                ind = ind + 1
+        
+        if encontrado == False:
+            ind = 0
+            regModeradores.seek(0,0)
+            while(regModeradores.tell() < os.path.getsize(rutaModeradores)):
+                mod = pickle.load(regModeradores)
+                if(email == mod.email and password == mod.contrasenia and mod.estado == True):
+                    acceso_valido[0] = ind
+                    acceso_valido[1] = 1
+                    encontrado = True
+                if encontrado == False:
+                    ind = ind + 1
+            if encontrado == False:
                 limpiar_consola()
                 intentos = intentos - 1
                 print("Datos incorrectos. Intentos restantes:", intentos, "\n")
@@ -564,9 +573,9 @@ def registrar(estudiantes, moderadores, estados):
 
     limpiar_consola()
 
+#endregion
 
-### Estudiante ###
-
+#region Estudiantes
 
 def contar_estudiantes(estudiantes):
     ind = 0
@@ -625,6 +634,7 @@ def validar_id_estudiante(est_id, estudiantes):
 def contar_estudiantes_activos(estudiantes, estados):
     cant = 0
     ind = 0
+    regEstudiantes.seek(0,0)
 
     while ind < 8 and estudiantes[ind][0] != "":
         if estados[ind]:
@@ -733,10 +743,10 @@ def mostrar_datos_estudiante(est_id, estudiantes):
         print(PROPS_ESTUDIANTE[ind - 2], ":", estudiantes[est_id][ind])
 
 
-def manejador_submenu_gestionar_perfil(est_id, estudiantes, estados):
+def manejador_submenu_gestionar_perfil(est_id, estudiantes):
     opc = ""
 
-    while opc != "c" and estados[est_id]:
+    while opc != "c":
         limpiar_consola()
         print("........Gestionar Perfil........\n")
         print("a. Editar mis datos personales")
@@ -752,7 +762,7 @@ def manejador_submenu_gestionar_perfil(est_id, estudiantes, estados):
         if opc == "a":
             editar_datos_estudiante(est_id, estudiantes)
         elif opc == "b":
-            eliminar_perfil(est_id, estados)
+            eliminar_perfil(est_id)
 
 
 def validar_nombre(nombre, estudiantes):
@@ -1100,8 +1110,9 @@ def ruleta(usuario_id, estudiantes, estados, me_gusta):
             print("No hay suficientes estudiantes activos para esta función.")
             input("Presione Enter para volver al inicio... ")
 
+#endregion
 
-### Reporte ###
+#region Reportes
 
 def contar_reportes(reportes):
     ind = 0
@@ -1171,9 +1182,9 @@ def ver_reportes(reportes, motivo_reportes, estudiantes, estados):
         print("No quedan más reportes pendientes.")
         input("Presione Enter para continuar... ")
 
+#endregion
 
-### Moderador ###
-
+#region Moderadores
 
 def contar_moderadores(moderadores):
     ind = 0
@@ -1240,9 +1251,9 @@ def manejador_submenu_gestionar_reportes(estudiantes, reportes, motivo_reportes,
         if opc == "a":
             ver_reportes(reportes, motivo_reportes, estudiantes, estados)
 
+#endregion
 
-### Mostrar ###
-
+#region Mostrar
 
 def mostrar_menu_principal_estudiante():
     limpiar_consola()
@@ -1293,11 +1304,11 @@ def mostrar_menu_principal_moderadores():
     return opc
 
 
-def mostrar_menu_usuario(usuario_id, rol, estudiantes, estados, me_gusta, reportes, motivo_reportes):
+def mostrar_menu_usuario(usuario_id, rol):
     if rol == 0:
-        gestionador_menu_principal_estudiante(usuario_id, estudiantes, estados, me_gusta, reportes, motivo_reportes)
+        gestionador_menu_principal_estudiante(usuario_id)
     elif rol == 1:
-        manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, estados)
+        manejador_menu_principal_moderador(usuario_id)
 
 
 def mostrar_menu_principal():
@@ -1316,46 +1327,58 @@ def mostrar_menu_principal():
 
     return opcion
 
+#endregion
 
 ### Gestionar ###
 
 
-def gestionador_menu_principal_estudiante(est_id, estudiantes, estados, me_gusta, reportes, motivo_reportes):
+def gestionador_menu_principal_estudiante(est_id):
     opc = ""
+    regEstudiantes.seek(0,0)
+    validado = False
+    while(regEstudiantes.tell() < os.path.getsize(rutaEstudiante) and validado == False):
+        estudiante = pickle.load(regEstudiantes)
+        if(est_id == estudiante.id_estudiante  and estudiante.estado == True):
+                validado = True
 
-    while opc != "0" and estados[est_id]:
-        for i in range(8):
-            print(me_gusta[i])
+    while opc != "0":
         opc = mostrar_menu_principal_estudiante()
 
         match opc:
             case "1":
-                manejador_submenu_gestionar_perfil(est_id, estudiantes, estados)
+                manejador_submenu_gestionar_perfil(est_id, estudiante)
 
             case "2":
-                manejador_submenu_gestionar_candidatos(est_id, reportes, motivo_reportes, estudiantes, estados, me_gusta)
+                manejador_submenu_gestionar_candidatos(est_id, estudiante)
 
             case "3":
                 manejador_submenu_matcheos()
 
             case "4":
-                reportes_estadisticos_estudiante(est_id, estudiantes[:], estados[:], me_gusta[:])
+                reportes_estadisticos_estudiante(est_id, estudiante)
 
             case "5":
-                ruleta(est_id, estudiantes[:], estados[:], me_gusta)
+                ruleta(est_id, estudiante)
 
             case "6":
                 huecos_edades()
 
             case "7":
-                matcheos_combinados(estudiantes[:], estados[:])
+                matcheos_combinados(estudiante)
 
             case "0":
                 limpiar_consola()
 
 
-def manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, estados):
+def manejador_menu_principal_moderador(usuarioId):
     opc = "1"
+
+    regModeradores.seek(0,0)
+    validado = False
+    while(regModeradores.tell() < os.path.getsize(rutaModeradores) and validado == False):
+        moderador = pickle.load(regModeradores)
+        if(usuarioId == moderador.id_moderador  and moderador.estado == True):
+                validado = True
 
     while opc != "0":
         opc = mostrar_menu_principal_moderadores()
@@ -1375,14 +1398,9 @@ def manejador_menu_principal_moderador(reportes, motivo_reportes, estudiantes, e
                 print("¡Hasta luego!")
 
 
-def main():
-    likes = [[0] * 8 for n in range(8)]
-    estudiantes = [estudiantes for n in range(8)]
-    moderadores = [[""] * 2 for n in range(4)]
-    me_gusta = [[False] * 8 for n in range(8)]
-    reportes = [[-1] * 3 for n in range(40)]
-    motivo_reportes = [""] * 40
-    estados = [False] * 8    
+def main():  
+
+    AbrirArchivo(rutaCarpetaDatos, rutaEstudiante, rutaModeradores, rutaAdministradores, rutaLikes, rutaReportes)
 
     opc = ""
     usuario = [0] * 2
@@ -1394,11 +1412,11 @@ def main():
                 limpiar_consola()
                 print("¡Hasta luego!")
             case "1":
-                usuario = log_in(estudiantes[:], moderadores[:], estados[:])
+                usuario = log_in()
                 if usuario[0] != -1:
-                    mostrar_menu_usuario(usuario[0], usuario[1], estudiantes, estados, me_gusta, reportes, motivo_reportes)
+                    mostrar_menu_usuario(usuario[0], usuario[1])
             case "2":
-                registrar(estudiantes, moderadores, estados)
+                registrar()
 
 
 main()
